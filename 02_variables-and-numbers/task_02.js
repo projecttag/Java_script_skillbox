@@ -1,14 +1,20 @@
 
-let first = 13.1 + 0.2 + 0.3 + 0.4 + 0.5;
-let second = 13.12345;
-let precision = 5;
+let a = 13.123456789; // задано число с переменной а
+let b = 2.123; // задано число с переменной b
+let precision = 5; //задано округление в пять единиц после дробной части
 
-let firstNormalized =  Math.round(first * Math.pow(10, precision));
-let secondNormalized =  Math.round(second * Math.pow(10, precision));
+// Извлечение дробной части числа
+let aFraction = a - Math.floor(a);
+let bFraction = b - Math.floor(b);
 
-console.log('Первое число больше', first > second );
-console.log('Первое число меньше', first < second );
-console.log('Первое число больше больше или равно', first >= second );
-console.log('Первое число меньше или равно', first <= second );
-console.log('Первое равно второму', first === second );
-console.log('Первое число не равно второму', first !== second );
+// Нормализация дробной части с учетом precision
+let aNormalized =  Math.round(aFraction * Math.pow(10, precision));
+let bNormalized =  Math.round(bFraction * Math.pow(10, precision));
+
+// Сравнение чисел между собой aNormalized и bNormalized
+console.log('Первое число больше', aNormalized > bNormalized );
+console.log('Первое число меньше', aNormalized < bNormalized);
+console.log('Первое число больше больше или равно', aNormalized >= bNormalized );
+console.log('Первое число меньше или равно', aNormalized <= bNormalized );
+console.log('Первое равно второму', aNormalized === bNormalized );
+console.log('Первое число не равно второму', aNormalized !== bNormalized );
