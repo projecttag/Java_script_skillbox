@@ -1,0 +1,72 @@
+
+h1 {
+    max-width:fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 10px;
+    font-family: 'Arial', sans-serif;
+}
+
+button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc; /* Светло-серая рамка */
+    color: #333;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+/* Эффект при наведении */
+button:hover {
+    border: 1px solid #073d7e;
+    transition: border 0.3s;
+}
+
+/* Стили для списка студентов */
+ul {
+    list-style-type: none; /* Убираем стандартные маркеры списка */
+    padding: 0;
+    margin: 20px 0;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Стили для каждого элемента списка */
+li {
+    background-color: #f0f0f0; /* Светло-серый фон */
+    border: 1px solid #ccc; /* Светло-серая рамка */
+    border-radius: 8px; /* Скругление углов */
+    margin-bottom: 15px;
+    padding: 15px;
+    transition: transform 0.3s ease; /* Добавляем плавный эффект при наведении */
+}
+
+/* Добавляем эффект при наведении на элемент */
+li:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-5px); /* Поднимаем элемент вверх при наведении */
+}
+
+/* Стили для заголовков с именем студентов */
+h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333; /* Темный цвет текста */
+    font-family: 'Arial', sans-serif;
+}
+
+/* Стили для возраста студента */
+span {
+    font-size: 1em;
+    color: #666; /* Более светлый цвет текста */
+    display: block;
+    margin-top: 5px;
+    font-family: 'Arial', sans-serif;
+}

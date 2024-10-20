@@ -1,0 +1,33 @@
+.student-card {
+    border: 1px solid black;
+    background-color: #f9f9f9;
+    max-width:fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 15px;
+    padding: 10px;
+    font-family: 'Arial', sans-serif;
+}
+
+h2 {
+    width: fit-content; /* Ширина под контент */
+    margin: auto; /* Автоматические отступы по бокам для центрирования */
+    padding: 10px; /* Отступы внутри блока */
+    font-family: 'Arial', sans-serif; /* Шрифт для текста */
+    text-align: center; /* Центрирование текста по горизонтали */
+    display: flex; /* Используем flexbox для вертикального центрирования */
+    justify-content: center; /* Горизонтальное центрирование */
+    align-items: center; /* Вертикальное центрирование */
+}
+
+span  {
+    width: fit-content; /* Ширина под контент */
+    margin: auto; /* Автоматические отступы по бокам для центрирования */
+    padding: 10px; /* Отступы внутри блока */
+    font-family: 'Arial', sans-serif; /* Шрифт для текста */
+    text-align: center; /* Центрирование текста по горизонтали */
+    display: flex; /* Используем flexbox для вертикального центрирования */
+    justify-content: center; /* Горизонтальное центрирование */
+    align-items: center; /* Вертикальное центрирование */
+    height: 50px; /* Высота блока*/
+}
