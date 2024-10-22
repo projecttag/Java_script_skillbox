@@ -167,6 +167,20 @@
     window.createTodoApp = createTodoApp;
 })();
 
-document.addEventListener('DOMContentLoaded', function() {
-    createTodoApp(document.getElementById('todo-app'), 'Мои дела', 'my');
+// Функция для переключения вкладок и отрисовки соответствующих дел
+document.addEventListener('DOMContentLoaded', function () {
+    const tabs = document.querySelectorAll('.tab');
+    const content = document.getElementById('todo-app-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function () {
+            content.innerHTML = '';  // Очищаем содержимое перед отрисовкой
+            const listName = this.getAttribute('data-list');  // Получаем имя списка из атрибута data-list
+            const title = this.textContent;
+            createTodoApp(content, title, listName);  // Отрисовываем соответствующий список дел
+        });
+    });
+
+    // Инициализируем первую вкладку по умолчанию
+    tabs[0].click();
 });
