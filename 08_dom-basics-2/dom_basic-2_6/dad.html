@@ -11,7 +11,7 @@
   <script defer src="./main.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      createTodoApp(document.getElementById('todo-app'), 'Дела папы');
+      createTodoApp(document.getElementById('todo-app'), 'Дела папы', 'dad-tasks');
     });
 
   </script>
@@ -20,9 +20,9 @@
 <body>
   <div class="container mb-5">
     <nav class="nav">
-      <a class="nav-link" href="index.html">Мои дела</a>
-      <a class="nav-link" href="dad.html">Дела папы</a>
-      <a class="nav-link" href="mom.html">Дела мамы</a>
+      <a class="nav-link tab" href="index.html">Мои дела</a>
+      <a class="nav-link tab" href="dad.html">Дела папы</a>
+      <a class="nav-link tab" href="mom.html">Дела мамы</a>
     </nav>
   </div>
   <div id="todo-app" class="container"></div>
