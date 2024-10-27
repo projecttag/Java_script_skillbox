@@ -1,6 +1,8 @@
 let firstCard = null;
 let secondCard = null;
 let lockBoard = false;
+let matchedPairs = 0; // отслеживаем количество найденных пар
+const totalPairs = 8; // общее количество пар
 
 // Этап 1. Создайте функцию, генерирующую массив парных чисел.
 function createNumbersArray(count) {
@@ -22,6 +24,8 @@ function shuffle(arr) {
 
 // Этап 3. Функция для начала игры.
 function startGame(count) {
+    matchedPairs = 0; // сбрасываем количество найденных пар
+    document.getElementById('restart-btn').style.display = 'none'; // скрываем кнопку
     const board = document.getElementById('game-board');
     board.innerHTML = ''; // очищаем игровое поле
     let numbersArray = shuffle(createNumbersArray(count)); // создаём и перемешиваем массив чисел
@@ -53,6 +57,8 @@ function handleCardClick(event) {
         if (firstCard.getAttribute('data-number') === secondCard.getAttribute('data-number')) {
             firstCard.classList.add('matched');
             secondCard.classList.add('matched');
+            matchedPairs++; // увеличиваем количество найденных пар
+            checkForWin(); // проверяем, победил ли игрок
             resetSelection();
         } else {
             setTimeout(() => {
@@ -69,6 +75,13 @@ function handleCardClick(event) {
 function resetSelection() {
     [firstCard, secondCard] = [null, null];
     lockBoard = false;
+}
+
+// Проверка, все ли пары найдены
+function checkForWin() {
+    if (matchedPairs === totalPairs) {
+        document.getElementById('restart-btn').style.display = 'block'; // показываем кнопку после победы
+    }
 }
 
 // Инициализация игры при загрузке страницы

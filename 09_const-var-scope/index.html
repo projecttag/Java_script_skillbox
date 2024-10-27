@@ -48,6 +48,18 @@
       background-color: #eee;
     }
 
+    /* Контейнер для кнопки по центру */
+    .center-btn-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    #restart-btn {
+      display: none;
+      margin-top: 20px;
+      /* Отступ кнопки сверху */
+    }
+
   </style>
 
 </head>
@@ -57,7 +69,10 @@
   <div class="container py-5">
     <h1 class="mb-4">Игра в пары</h1>
     <div id="game-board" class="mb-3"></div>
-    <button id="restart-btn" class="btn btn-primary" onclick="startGame(8)">Сыграть ещё раз</button>
+    <!-- Контейнер для кнопки, которая будет центрирована горизонтально и расположена чуть ниже игрового поля -->
+    <div class="center-btn-container">
+      <button id="restart-btn" class="btn btn-primary" onclick="startGame(8)">Сыграть ещё раз</button>
+    </div>
   </div>
 
   <!-- Подключение Bootstrap JS и Popper -->
