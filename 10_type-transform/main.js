@@ -192,3 +192,24 @@ document.getElementById('filterName').addEventListener('input', filterStudents);
 document.getElementById('filterFaculty').addEventListener('input', filterStudents);
 document.getElementById('filterStartYear').addEventListener('input', filterStudents);
 document.getElementById('filterEndYear').addEventListener('input', filterStudents);
+
+// Обработчики кликов для сортировки
+document.getElementById('sortFullName').addEventListener('click', function() {
+    currentSort = 'fullName';
+    sortStudents();
+});
+
+document.getElementById('sortFaculty').addEventListener('click', function() {
+    currentSort = 'faculty';
+    sortStudents();
+});
+
+document.getElementById('sortBirthDate').addEventListener('click', function() {
+    currentSort = 'birthDate';
+    sortStudents();
+});
+
+document.getElementById('sortStartYear').addEventListener('click', function() {
+    currentSort = 'startYear';
+    sortStudents();
+});
