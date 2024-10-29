@@ -1,5 +1,3 @@
-// Этап 2: Создание массива студентов
-
 const students = [
     {
         firstName: "Иван",
@@ -51,8 +49,7 @@ const students = [
     }
 ];
 
-// Этап 3: Функция вывода одного студента
-
+// Функция вывода одного студента
 function createStudentRow(student) {
     const age = new Date().getFullYear() - student.birthDate.getFullYear();
     const graduationYear = student.startYear + 4;
@@ -69,8 +66,7 @@ function createStudentRow(student) {
     `;
 }
 
-// Этап 4: Функция отрисовки студентов
-
+// Функция отрисовки студентов
 function renderStudents(studentsArray) {
     const tableBody = document.getElementById('student-table-body');
     tableBody.innerHTML = ''; // Очищаем таблицу
@@ -82,8 +78,7 @@ function renderStudents(studentsArray) {
 // Вызовите функцию отрисовки студентов при загрузке страницы
 renderStudents(students);
 
-// Этап 5: Валидация и добавление студента
-
+// Валидация и добавление студента
 document.getElementById('student-form').addEventListener('submit', function(event) {
     event.preventDefault(); // Предотвращаем перезагрузку страницы
     const firstName = document.getElementById('firstName').value.trim();
@@ -117,9 +112,11 @@ document.getElementById('student-form').addEventListener('submit', function(even
     this.reset(); // Очищаем форму
 });
 
-// Этап 6: Функции сортировки и фильтрации
-function sortStudents(criteria) {
-    switch (criteria) {
+// Функции сортировки и фильтрации
+let currentSort = 'fullName';
+
+function sortStudents() {
+    switch (currentSort) {
         case 'fullName':
             students.sort((a, b) => `${a.lastName} ${a.firstName} ${a.middleName}`.localeCompare(`${b.lastName} ${b.firstName} ${b.middleName}`));
             break;
@@ -136,6 +133,10 @@ function sortStudents(criteria) {
     renderStudents(students); // Обновляем таблицу после сортировки
 }
 
+document.getElementById('sortFullName').addEventListener('click', function() {
+    currentSort = 'fullName';
+    sortStudents();
+});
 
 function filterStudents() {
     let filteredStudents = students;
@@ -147,11 +148,22 @@ function filterStudents() {
 
     if (filterName) {
         filteredStudents = filteredStudents.filter(student =>
-            student.firstName.toLowerCase().includes(filterName) ||
-            student.lastName.toLowerCase().includes(filterName) ||
-            student.middleName.toLowerCase().includes(filterName)
+            `${student.lastName} ${student.firstName} ${student.middleName}`.toLowerCase().includes(filterName)
         );
     }
+
+//     if (filterName) {
+//     filteredStudents = filteredStudents.filter(student => {
+//         const fullName = `${student.lastName} ${student.firstName} ${student.middleName}`.toLowerCase();
+//         return fullName.includes(filterName);
+//     });
+// }
+
+// Второй блок закоментированный повышает читаемость сначала создается переменная fullName,
+// а затем используется для проверки на совпадение.
+// Разделение логики на несколько строк может облегчить понимание и отладку кода,
+//  особенно если потом добавлять дополнительные операции с fullName
+
 
     if (filterFaculty) {
         filteredStudents = filteredStudents.filter(student =>
@@ -180,5 +192,3 @@ document.getElementById('filterName').addEventListener('input', filterStudents);
 document.getElementById('filterFaculty').addEventListener('input', filterStudents);
 document.getElementById('filterStartYear').addEventListener('input', filterStudents);
 document.getElementById('filterEndYear').addEventListener('input', filterStudents);
-
-
