@@ -96,7 +96,7 @@ function createStudentRow(student) {
 
 //2. Новая функция. Убрали Функцию отрисовки студентов и заменили на новую. Функция отрисовки студентов
 function renderStudents(students) {
-    const studentList = document.getElementById('studentList');
+    const studentList = document.getElementById('student-table-body'); //!тут studentList был заменен на student-table-body
     studentList.innerHTML = ''; // Очищаем предыдущий список студентов
 
     if (students.length === 0) {
