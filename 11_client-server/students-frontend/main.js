@@ -5,7 +5,7 @@ let students = [
         surname: "Иванов",
         lastname: "Иванович",
         birthday: new Date('2000-01-01').toISOString(),
-        'study Start': 2019,
+        'studyStart': 2019,
         faculty: "Факультет компьютерных наук"
     },
     {
@@ -14,7 +14,7 @@ let students = [
         surname: "Петрова",
         lastname: "Сергеевна",
         birthday: new Date('1999-03-15').toISOString(),
-        'study Start': 2018,
+        'studyStart': 2018,
         faculty: "Факультет бизнеса"
     },
     {
@@ -23,7 +23,7 @@ let students = [
         surname: "Сидоров",
         lastname: "Александрович",
         birthday: new Date('2001-07-20').toISOString(),
-        'study Start': 2019,
+        'studyStart': 2019,
         faculty: "Факультет инженерии"
     },
     {
@@ -32,7 +32,7 @@ let students = [
         surname: "Кузнецова",
         lastname: "Михайловна",
         birthday: new Date('2000-11-30').toISOString(),
-        'study Start': 2019,
+        'studyStart': 2019,
         faculty: "Факультет искусств"
     },
     {
@@ -41,7 +41,7 @@ let students = [
         surname: "Федоров",
         lastname: "Викторович",
         birthday: new Date('1998-05-10').toISOString(),
-        'study Start': 2017,
+        'studyStart': 2017,
         faculty: "Факультет математики"
     },
     {
@@ -50,7 +50,7 @@ let students = [
         surname: "Смирнова",
         lastname: "Владимировна",
         birthday: new Date('1997-12-05').toISOString(),
-        'study Start': 2016,
+        'studyStart': 2016,
         faculty: "Факультет филологии"
     }
 ];
@@ -74,16 +74,16 @@ async function deleteStudent(studentId) {
 // Функция вывода одного студента
 function createStudentRow(student) {
     const age = new Date().getFullYear() - new Date(student.birthday).getFullYear();
-    const graduationYear = student['study Start'] + 4;
+    const graduationYear = student['studyStart'] + 4;
     const currentYear = new Date().getFullYear();
-    const course = currentYear >= graduationYear ? 'закончил' : `${currentYear - student['study Start']} курс`;
+    const course = currentYear >= graduationYear ? 'закончил' : `${currentYear - student['studyStart']} курс`;
     const formattedDate = `${new Date(student.birthday).toLocaleDateString()} (${age} лет)`;
     return `
         <tr>
             <td>${student.surname} ${student.name} ${student.lastname}</td>
             <td>${student.faculty}</td>
             <td>${formattedDate}</td>
-            <td>${student['study Start']}-${graduationYear} (${course})</td>
+            <td>${student['studyStart']}-${graduationYear} (${course})</td>
         </tr>
     `;
 }
@@ -149,7 +149,7 @@ document.getElementById('student-form').addEventListener('submit', async functio
         return;
     }
 
-    const newStudent = { name, surname, lastname, birthday: birthday.toISOString(), 'study Start': studyStart, faculty };
+    const newStudent = { name, surname, lastname, birthday: birthday.toISOString(), 'studyStart': studyStart, faculty };
 
     try {
         const response = await fetch('http://localhost:3000/api/students', {
@@ -187,8 +187,8 @@ function sortStudents() {
         case 'birthday':
             students.sort((a, b) => new Date(a.birthday) - new Date(b.birthday));
             break;
-        case 'study Start':
-            students.sort((a, b) => a['study Start'] - b['study Start']);
+        case 'studyStart':
+            students.sort((a, b) => a['studyStart'] - b['studyStart']);
             break;
     }
     renderStudents(students);
@@ -215,14 +215,14 @@ function filterStudents() {
 
     if (filterStartYear) {
         filteredStudents = filteredStudents.filter(student =>
-            student['study Start'] === filterStartYear
+            student['studyStart'] === filterStartYear
         );
     }
 
     if (filterEndYear) {
         const graduationYear = filterEndYear - 4;
         filteredStudents = filteredStudents.filter(student =>
-            student['study Start'] === graduationYear
+            student['studyStart'] === graduationYear
         );
     }
 
@@ -250,6 +250,6 @@ document.getElementById('sortBirthDate').addEventListener('click', function() {
 });
 
 document.getElementById('sortStartYear').addEventListener('click', function() {
-    currentSort = 'study Start';
+    currentSort = 'studyStart';
     sortStudents();
 });
