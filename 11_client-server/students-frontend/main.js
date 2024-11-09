@@ -76,7 +76,7 @@ function createStudentRow(student) {
     const age = new Date().getFullYear() - new Date(student.birthday).getFullYear();
     const graduationYear = student['studyStart'] + 4;
     const currentYear = new Date().getFullYear();
-    const course = currentYear >= graduationYear ? 'закончил' : `${currentYear - student['studyStart']} курс`;
+    const course = currentYear >= graduationYear ? 'закончил' : `${currentYear - student['studyStart'] + 1} курс`; // для корректного отображения курса
     const formattedDate = `${new Date(student.birthday).toLocaleDateString()} (${age} лет)`;
     return `
         <tr>
