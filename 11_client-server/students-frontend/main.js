@@ -76,19 +76,33 @@ function createStudentRow(student) {
     const age = new Date().getFullYear() - new Date(student.birthday).getFullYear();
     const graduationYear = student['studyStart'] + 4;
     const currentYear = new Date().getFullYear();
-    const course = currentYear >= graduationYear ? 'закончил' : `${currentYear - student['studyStart'] + 1} курс`; // для корректного отображения курса
+    const course = currentYear >= graduationYear ? 'закончил' : `${currentYear - student['studyStart'] + 1} курс`;
     const formattedDate = `${new Date(student.birthday).toLocaleDateString()} (${age} лет)`;
+
     return `
         <tr>
             <td>${student.surname} ${student.name} ${student.lastname}</td>
             <td>${student.faculty}</td>
             <td>${formattedDate}</td>
             <td>${student['studyStart']}-${graduationYear} (${course})</td>
+            <td><button class="delete-btn" data-id="${student.id}">Удалить</button></td>
         </tr>
     `;
 }
 
-// Функция отрисовки студентов
+
+//2 ИЗМЕНЕНО! кнопка удаления студента
+function addDeleteButtonListeners() {
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const studentId = parseInt(this.getAttribute('data-id'));
+            deleteStudent(studentId);
+        });
+    });
+}
+
+//1 ИЗМЕНЕНО! Обновлен вызов функции renderStudents, добавленен вызов addDeleteButtonListeners
 function renderStudents(students) {
     const studentList = document.getElementById('student-table-body');
     studentList.innerHTML = '';
@@ -99,6 +113,9 @@ function renderStudents(students) {
     students.forEach(student => {
         studentList.innerHTML += createStudentRow(student);
     });
+
+    // Добавляем слушатели событий для кнопок удаления
+    addDeleteButtonListeners();
 }
 renderStudents(students);
 
