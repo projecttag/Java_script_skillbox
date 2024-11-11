@@ -74,7 +74,7 @@ async function deleteStudent(studentId) {
 // Функция вывода одного студента
 function createStudentRow(student) {
     const age = new Date().getFullYear() - new Date(student.birthday).getFullYear();
-    const graduationYear = student['studyStart'] + 4;
+    const graduationYear = Number(student['studyStart']) + 6; // Исправление - преобразование в число
     const currentYear = new Date().getFullYear();
     const course = currentYear >= graduationYear ? 'закончил' : `${currentYear - student['studyStart'] + 1} курс`;
     const formattedDate = `${new Date(student.birthday).toLocaleDateString()} (${age} лет)`;
@@ -84,14 +84,13 @@ function createStudentRow(student) {
             <td>${student.surname} ${student.name} ${student.lastname}</td>
             <td>${student.faculty}</td>
             <td>${formattedDate}</td>
-            <td>${student['studyStart']}-${graduationYear} (${course})</td>
+            <td>${student['studyStart']}-${graduationYear} (${course})</td> <!-- Период обучения -->
             <td><button class="delete-btn" data-id="${student.id}">Удалить</button></td>
         </tr>
     `;
 }
 
-
-//2 ИЗМЕНЕНО! кнопка удаления студента
+// Кнопка удаления студента
 function addDeleteButtonListeners() {
     const deleteButtons = document.querySelectorAll('.delete-btn');
     deleteButtons.forEach(button => {
@@ -102,7 +101,7 @@ function addDeleteButtonListeners() {
     });
 }
 
-//1 ИЗМЕНЕНО! Обновлен вызов функции renderStudents, добавленен вызов addDeleteButtonListeners
+// Обновление списка студентов
 function renderStudents(students) {
     const studentList = document.getElementById('student-table-body');
     studentList.innerHTML = '';
@@ -119,7 +118,7 @@ function renderStudents(students) {
 }
 renderStudents(students);
 
-// Функция загрузки студентов
+// Загрузка студентов
 async function loadStudents() {
     try {
         const response = await fetch('http://localhost:3000/api/students');
@@ -237,9 +236,8 @@ function filterStudents() {
     }
 
     if (filterEndYear) {
-        const graduationYear = filterEndYear - 4;
         filteredStudents = filteredStudents.filter(student =>
-            student['studyStart'] === graduationYear
+            (student['studyStart'] + 6) === filterEndYear // Сравниваем год окончания
         );
     }
 
@@ -251,22 +249,22 @@ document.getElementById('filterFaculty').addEventListener('input', filterStudent
 document.getElementById('filterStartYear').addEventListener('input', filterStudents);
 document.getElementById('filterEndYear').addEventListener('input', filterStudents);
 
-document.getElementById('sortFullName').addEventListener('click', function() {
+document.getElementById('sortFullName').addEventListener('click', function () {
     currentSort = 'fullName';
     sortStudents();
 });
 
-document.getElementById('sortFaculty').addEventListener('click', function() {
+document.getElementById('sortFaculty').addEventListener('click', function () {
     currentSort = 'faculty';
     sortStudents();
 });
 
-document.getElementById('sortBirthDate').addEventListener('click', function() {
+document.getElementById('sortBirthday').addEventListener('click', function () {
     currentSort = 'birthday';
     sortStudents();
 });
 
-document.getElementById('sortStartYear').addEventListener('click', function() {
+document.getElementById('sortStudyStart').addEventListener('click', function () {
     currentSort = 'studyStart';
     sortStudents();
 });
