@@ -1,60 +1,3 @@
-let students = [
-    {
-        id: 1,
-        name: "Иван",
-        surname: "Иванов",
-        lastname: "Иванович",
-        birthday: new Date('2000-01-01').toISOString(),
-        'studyStart': 2019,
-        faculty: "Факультет компьютерных наук"
-    },
-    {
-        id: 2,
-        name: "Анна",
-        surname: "Петрова",
-        lastname: "Сергеевна",
-        birthday: new Date('1999-03-15').toISOString(),
-        'studyStart': 2018,
-        faculty: "Факультет бизнеса"
-    },
-    {
-        id: 3,
-        name: "Алексей",
-        surname: "Сидоров",
-        lastname: "Александрович",
-        birthday: new Date('2001-07-20').toISOString(),
-        'studyStart': 2019,
-        faculty: "Факультет инженерии"
-    },
-    {
-        id: 4,
-        name: "Мария",
-        surname: "Кузнецова",
-        lastname: "Михайловна",
-        birthday: new Date('2000-11-30').toISOString(),
-        'studyStart': 2019,
-        faculty: "Факультет искусств"
-    },
-    {
-        id: 5,
-        name: "Дмитрий",
-        surname: "Федоров",
-        lastname: "Викторович",
-        birthday: new Date('1998-05-10').toISOString(),
-        'studyStart': 2017,
-        faculty: "Факультет математики"
-    },
-    {
-        id: 6,
-        name: "Ольга",
-        surname: "Смирнова",
-        lastname: "Владимировна",
-        birthday: new Date('1997-12-05').toISOString(),
-        'studyStart': 2016,
-        faculty: "Факультет филологии"
-    }
-];
-
 // Функция удаления студента
 async function deleteStudent(studentId) {
     try {
@@ -64,8 +7,7 @@ async function deleteStudent(studentId) {
         if (!response.ok) {
             throw new Error('Ошибка при удалении студента');
         }
-        students = students.filter(student => student.id !== studentId);
-        renderStudents(students);
+        loadStudents(); // Перезагружаем список студентов после удаления
     } catch (error) {
         console.error(error);
     }
@@ -74,7 +16,7 @@ async function deleteStudent(studentId) {
 // Функция вывода одного студента
 function createStudentRow(student) {
     const age = new Date().getFullYear() - new Date(student.birthday).getFullYear();
-    const graduationYear = Number(student['studyStart']) + 6; // Исправление - преобразование в число
+    const graduationYear = Number(student['studyStart']) + 4;
     const currentYear = new Date().getFullYear();
     const course = currentYear >= graduationYear ? 'закончил' : `${currentYear - student['studyStart'] + 1} курс`;
     const formattedDate = `${new Date(student.birthday).toLocaleDateString()} (${age} лет)`;
@@ -84,7 +26,7 @@ function createStudentRow(student) {
             <td>${student.surname} ${student.name} ${student.lastname}</td>
             <td>${student.faculty}</td>
             <td>${formattedDate}</td>
-            <td>${student['studyStart']}-${graduationYear} (${course})</td> <!-- Период обучения -->
+            <td>${student['studyStart']}-${graduationYear} (${course})</td>
             <td><button class="delete-btn" data-id="${student.id}">Удалить</button></td>
         </tr>
     `;
@@ -116,7 +58,9 @@ function renderStudents(students) {
     // Добавляем слушатели событий для кнопок удаления
     addDeleteButtonListeners();
 }
-renderStudents(students);
+// 1 Удалено
+// renderStudents(students);
+
 
 // Загрузка студентов
 async function loadStudents() {
@@ -126,16 +70,22 @@ async function loadStudents() {
             throw new Error('Ошибка при загрузке студентов');
         }
         const serverStudents = await response.json();
-        if (serverStudents.length > 0) {
-            students = serverStudents;
-            renderStudents(students);
-        } else {
-            renderStudents([]);
-        }
+
+//2 Удалено по причине того что когда данные загружаются с сервера, их можно сразу передать в функцию
+//renderStudents(), не создавая промежуточную переменную students, если она не используется где-то ещё в коде.
+// if (serverStudents.length > 0) {
+//             students = serverStudents;
+//             renderStudents(students);
+//         } else {
+//             renderStudents([]);
+//         }
+
+        renderStudents(serverStudents);
     } catch (error) {
         console.error(error);
     }
 }
+
 document.addEventListener('DOMContentLoaded', loadStudents);
 
 // Валидация и добавление студента
@@ -180,9 +130,12 @@ document.getElementById('student-form').addEventListener('submit', async functio
             throw new Error('Ошибка при добавлении студента');
         }
 
-        const addedStudent = await response.json();
-        students.push(addedStudent);
-        renderStudents(students);
+        //3 Удалено
+        // const addedStudent = await response.json();
+        // renderStudents(students);
+
+
+        loadStudents(); // Обновляем список студентов после добавления
         this.reset();
     } catch (error) {
         errorMessage.textContent = error.message;
@@ -192,7 +145,7 @@ document.getElementById('student-form').addEventListener('submit', async functio
 // Функции сортировки и фильтрации
 let currentSort = 'fullName';
 
-function sortStudents() {
+function sortStudents(students) {
     switch (currentSort) {
         case 'fullName':
             students.sort((a, b) => `${a.surname} ${a.name} ${a.lastname}`.localeCompare(`${b.surname} ${b.name} ${b.lastname}`));
@@ -210,12 +163,13 @@ function sortStudents() {
     renderStudents(students);
 }
 
-function filterStudents() {
-    let filteredStudents = students;
+function filterStudents(students) {
     const filterName = document.getElementById('filterName').value.trim().toLowerCase();
     const filterFaculty = document.getElementById('filterFaculty').value.trim().toLowerCase();
     const filterStartYear = Number(document.getElementById('filterStartYear').value);
     const filterEndYear = Number(document.getElementById('filterEndYear').value);
+
+    let filteredStudents = students;
 
     if (filterName) {
         filteredStudents = filteredStudents.filter(student =>
@@ -231,40 +185,40 @@ function filterStudents() {
 
     if (filterStartYear) {
         filteredStudents = filteredStudents.filter(student =>
-            student['studyStart'] === filterStartYear
+            student['studyStart'].toString() === filterStartYear.toString()
         );
     }
 
     if (filterEndYear) {
         filteredStudents = filteredStudents.filter(student =>
-            (student['studyStart'] + 6) === filterEndYear // Сравниваем год окончания
+            (student['studyStart'] + 4).toString() === filterEndYear.toString()
         );
     }
 
     renderStudents(filteredStudents);
 }
 
-document.getElementById('filterName').addEventListener('input', filterStudents);
-document.getElementById('filterFaculty').addEventListener('input', filterStudents);
-document.getElementById('filterStartYear').addEventListener('input', filterStudents);
-document.getElementById('filterEndYear').addEventListener('input', filterStudents);
+document.getElementById('filterName').addEventListener('input', () => loadStudents().then(filterStudents));
+document.getElementById('filterFaculty').addEventListener('input', () => loadStudents().then(filterStudents));
+document.getElementById('filterStartYear').addEventListener('input', () => loadStudents().then(filterStudents));
+document.getElementById('filterEndYear').addEventListener('input', () => loadStudents().then(filterStudents));
 
-document.getElementById('sortFullName').addEventListener('click', function () {
+document.getElementById('sortFullName').addEventListener('click', () => {
     currentSort = 'fullName';
-    sortStudents();
+    loadStudents().then(sortStudents);
 });
 
-document.getElementById('sortFaculty').addEventListener('click', function () {
+document.getElementById('sortFaculty').addEventListener('click', () => {
     currentSort = 'faculty';
-    sortStudents();
+    loadStudents().then(sortStudents);
 });
 
-document.getElementById('sortBirthday').addEventListener('click', function () {
+document.getElementById('sortBirthday').addEventListener('click', () => {
     currentSort = 'birthday';
-    sortStudents();
+    loadStudents().then(sortStudents);
 });
 
-document.getElementById('sortStudyStart').addEventListener('click', function () {
+document.getElementById('sortStudyStart').addEventListener('click', () => {
     currentSort = 'studyStart';
-    sortStudents();
+    loadStudents().then(sortStudents);
 });
