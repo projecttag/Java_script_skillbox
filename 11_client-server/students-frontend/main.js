@@ -70,16 +70,6 @@ async function loadStudents() {
             throw new Error('Ошибка при загрузке студентов');
         }
         const serverStudents = await response.json();
-
-//2 Удалено по причине того что когда данные загружаются с сервера, их можно сразу передать в функцию
-//renderStudents(), не создавая промежуточную переменную students, если она не используется где-то ещё в коде.
-// if (serverStudents.length > 0) {
-//             students = serverStudents;
-//             renderStudents(students);
-//         } else {
-//             renderStudents([]);
-//         }
-
         renderStudents(serverStudents);
     } catch (error) {
         console.error(error);
@@ -169,6 +159,13 @@ function filterStudents(students) {
     const filterStartYear = Number(document.getElementById('filterStartYear').value);
     const filterEndYear = Number(document.getElementById('filterEndYear').value);
 
+   //Исправлено! Проверка на отсутствие активных фильтров
+    if (!filterName && !filterFaculty && !filterStartYear && !filterEndYear) {
+        console.log("Фильтры пустые, выводим всех студентов");
+        renderStudents(students);
+        return;
+    }
+
     let filteredStudents = students;
 
     if (filterName) {
@@ -203,22 +200,41 @@ document.getElementById('filterFaculty').addEventListener('input', () => loadStu
 document.getElementById('filterStartYear').addEventListener('input', () => loadStudents().then(filterStudents));
 document.getElementById('filterEndYear').addEventListener('input', () => loadStudents().then(filterStudents));
 
-document.getElementById('sortFullName').addEventListener('click', () => {
-    currentSort = 'fullName';
-    loadStudents().then(sortStudents);
+//Исправлено изменены вызовы фильтрации
+document.getElementById('filterName').addEventListener('input', async () => {
+    const students = await loadStudents();
+    filterStudents(students);
+});
+document.getElementById('filterFaculty').addEventListener('input', async () => {
+    const students = await loadStudents();
+    filterStudents(students);
+});
+document.getElementById('filterStartYear').addEventListener('input', async () => {
+    const students = await loadStudents();
+    filterStudents(students);
+});
+document.getElementById('filterEndYear').addEventListener('input', async () => {
+    const students = await loadStudents();
+    filterStudents(students);
 });
 
-document.getElementById('sortFaculty').addEventListener('click', () => {
-    currentSort = 'faculty';
-    loadStudents().then(sortStudents);
-});
 
-document.getElementById('sortBirthday').addEventListener('click', () => {
-    currentSort = 'birthday';
-    loadStudents().then(sortStudents);
-});
+// document.getElementById('sortFullName').addEventListener('click', () => {
+//     currentSort = 'fullName';
+//     loadStudents().then(sortStudents);
+// });
 
-document.getElementById('sortStudyStart').addEventListener('click', () => {
-    currentSort = 'studyStart';
-    loadStudents().then(sortStudents);
-});
+// document.getElementById('sortFaculty').addEventListener('click', () => {
+//     currentSort = 'faculty';
+//     loadStudents().then(sortStudents);
+// });
+
+// document.getElementById('sortBirthday').addEventListener('click', () => {
+//     currentSort = 'birthday';
+//     loadStudents().then(sortStudents);
+// });
+
+// document.getElementById('sortStudyStart').addEventListener('click', () => {
+//     currentSort = 'studyStart';
+//     loadStudents().then(sortStudents);
+// });
