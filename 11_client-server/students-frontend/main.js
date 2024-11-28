@@ -71,8 +71,10 @@ async function loadStudents() {
         }
         const serverStudents = await response.json();
         renderStudents(serverStudents);
+        return serverStudents; //возвращаем масссив студентов
     } catch (error) {
         console.error(error);
+        return []; // Возвращаем пустой массив при ошибке чтобы избежать underfined
     }
 }
 
@@ -187,10 +189,16 @@ function filterStudents(students) {
     }
 
     if (filterEndYear) {
-        filteredStudents = filteredStudents.filter(student =>
-            (student['studyStart'] + 4).toString() === filterEndYear.toString()
+        filteredStudents = filteredStudents.filter(
+        (student) => Number(student.studyStart) + 4 === filterEndYear
         );
     }
+
+    // if (filterEndYear) {
+    //     filteredStudents = filteredStudents.filter(student =>
+    //         (student['studyStart'] + 4).toString() === filterEndYear.toString()
+    //     );
+    // } убрана конкатинация
 
     renderStudents(filteredStudents);
 }
