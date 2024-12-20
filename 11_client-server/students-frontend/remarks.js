@@ -1,6 +1,3 @@
-let students = [];
-
-
 // Функция удаления студента
 async function deleteStudent(studentId) {
     try {
@@ -10,11 +7,7 @@ async function deleteStudent(studentId) {
         if (!response.ok) {
             throw new Error('Ошибка при удалении студента');
         }
-
-        students = students.filter(student => student.id !== studentId); // Удаляем студента из массива
-        renderStudents(students); // Рендерим обновленный список
-
-        //! loadStudents();
+        loadStudents(); // Перезагружаем список студентов после удаления
     } catch (error) {
         console.error(error);
     }
@@ -76,14 +69,12 @@ async function loadStudents() {
         if (!response.ok) {
             throw new Error('Ошибка при загрузке студентов');
         }
-        students = await response.json(); // Сохраняем студентов в глобальной переменной
-        renderStudents(students); // Рендерим обновленный список
-        return students;
+        const serverStudents = await response.json();
+        renderStudents(serverStudents);
+        return serverStudents; //возвращаем масссив студентов
     } catch (error) {
         console.error(error);
-        students = []; // Очищаем массив при ошибке
-        renderStudents(students); // Рендерим пустой список
-        return [];
+        return []; // Возвращаем пустой массив при ошибке чтобы избежать underfined
     }
 }
 
@@ -131,9 +122,10 @@ document.getElementById('student-form').addEventListener('submit', async functio
             throw new Error('Ошибка при добавлении студента');
         }
 
-        const addedStudent = await response.json();
-        students.push(addedStudent); // Добавляем нового студента в массив
-        renderStudents(students); // Рендерим обновленный список
+        //3 Удалено
+        // const addedStudent = await response.json();
+        // renderStudents(students);
+
 
         loadStudents(); // Обновляем список студентов после добавления
         this.reset();
@@ -143,8 +135,9 @@ document.getElementById('student-form').addEventListener('submit', async functio
 });
 
 // Функции сортировки и фильтрации
+let currentSort = 'fullName';
 
-function sortStudents() {
+function sortStudents(students) {
     switch (currentSort) {
         case 'fullName':
             students.sort((a, b) => `${a.surname} ${a.name} ${a.lastname}`.localeCompare(`${b.surname} ${b.name} ${b.lastname}`));
@@ -159,13 +152,10 @@ function sortStudents() {
             students.sort((a, b) => a['studyStart'] - b['studyStart']);
             break;
     }
-    renderStudents(students); // Отображаем отсортированный список
+    renderStudents(students);
 }
 
 function filterStudents(students) {
-
-  let filteredStudents = [...students];
-
     const filterName = document.getElementById('filterName').value.trim().toLowerCase();
     const filterFaculty = document.getElementById('filterFaculty').value.trim().toLowerCase();
     const filterStartYear = Number(document.getElementById('filterStartYear').value);
@@ -178,7 +168,9 @@ function filterStudents(students) {
         return;
     }
 
-  if (filterName) {
+    let filteredStudents = students;
+
+    if (filterName) {
         filteredStudents = filteredStudents.filter(student =>
             `${student.surname} ${student.name} ${student.lastname}`.toLowerCase().includes(filterName)
         );
@@ -192,18 +184,23 @@ function filterStudents(students) {
 
     if (filterStartYear) {
         filteredStudents = filteredStudents.filter(student =>
-            student['studyStart'] === filterStartYear
+            student['studyStart'].toString() === filterStartYear.toString()
         );
     }
 
     if (filterEndYear) {
-        filteredStudents = filteredStudents.filter(student =>
-            Number(student['studyStart']) + 4 === filterEndYear
+        filteredStudents = filteredStudents.filter(
+        (student) => Number(student.studyStart) + 4 === filterEndYear
         );
     }
 
-    renderStudents(filteredStudents); // Отображаем отфильтрованный список
+    // if (filterEndYear) {
+    //     filteredStudents = filteredStudents.filter(student =>
+    //         (student['studyStart'] + 4).toString() === filterEndYear.toString()
+    //     );
+    // } убрана конкатинация
 
+    renderStudents(filteredStudents);
 }
 
 document.getElementById('filterName').addEventListener('input', () => loadStudents().then(filterStudents));
