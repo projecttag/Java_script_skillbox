@@ -1,5 +1,5 @@
 let students = [];
-
+let currentSort = 'fullName'; // Объявление переменной currentSort
 
 // Функция удаления студента
 async function deleteStudent(studentId) {
@@ -13,8 +13,6 @@ async function deleteStudent(studentId) {
 
         students = students.filter(student => student.id !== studentId); // Удаляем студента из массива
         renderStudents(students); // Рендерим обновленный список
-
-        //! loadStudents();
     } catch (error) {
         console.error(error);
     }
@@ -65,9 +63,6 @@ function renderStudents(students) {
     // Добавляем слушатели событий для кнопок удаления
     addDeleteButtonListeners();
 }
-// 1 Удалено
-// renderStudents(students);
-
 
 // Загрузка студентов
 async function loadStudents() {
@@ -163,22 +158,21 @@ function sortStudents() {
 }
 
 function filterStudents(students) {
-
-  let filteredStudents = [...students];
+    let filteredStudents = [...students];
 
     const filterName = document.getElementById('filterName').value.trim().toLowerCase();
     const filterFaculty = document.getElementById('filterFaculty').value.trim().toLowerCase();
     const filterStartYear = Number(document.getElementById('filterStartYear').value);
     const filterEndYear = Number(document.getElementById('filterEndYear').value);
 
-   //Исправлено! Проверка на отсутствие активных фильтров
+    // Проверка на отсутствие активных фильтров
     if (!filterName && !filterFaculty && !filterStartYear && !filterEndYear) {
         console.log("Фильтры пустые, выводим всех студентов");
         renderStudents(students);
         return;
     }
 
-  if (filterName) {
+    if (filterName) {
         filteredStudents = filteredStudents.filter(student =>
             `${student.surname} ${student.name} ${student.lastname}`.toLowerCase().includes(filterName)
         );
@@ -203,28 +197,22 @@ function filterStudents(students) {
     }
 
     renderStudents(filteredStudents); // Отображаем отфильтрованный список
-
 }
 
-document.getElementById('filterName').addEventListener('input', () => loadStudents().then(filterStudents));
-document.getElementById('filterFaculty').addEventListener('input', () => loadStudents().then(filterStudents));
-document.getElementById('filterStartYear').addEventListener('input', () => loadStudents().then(filterStudents));
-document.getElementById('filterEndYear').addEventListener('input', () => loadStudents().then(filterStudents));
-
-//Исправлено изменены вызовы фильтрации
+// Исправленные вызовы фильтрации
 document.getElementById('filterName').addEventListener('input', async () => {
-    const students = await loadStudents();
+    await loadStudents();
     filterStudents(students);
 });
 document.getElementById('filterFaculty').addEventListener('input', async () => {
-    const students = await loadStudents();
+    await loadStudents();
     filterStudents(students);
 });
 document.getElementById('filterStartYear').addEventListener('input', async () => {
-    const students = await loadStudents();
+    await loadStudents();
     filterStudents(students);
 });
 document.getElementById('filterEndYear').addEventListener('input', async () => {
-    const students = await loadStudents();
+    await loadStudents();
     filterStudents(students);
 });
